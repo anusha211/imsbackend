@@ -4,22 +4,36 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "ts-node src/index.ts"
+    "start": "npx nodemon",
+    "test": "jest",
+    "clean": "rimraf dist"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
     "express": "^4.19.2",
-    "joi": "^17.13.3"
+    "jest": "^29.7.0",
+    "joi": "^17.13.3",
+    "mysql2": "^3.10.3",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.20"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/express-validator": "^3.0.0",
+    "@types/jest": "^29.5.12",
     "@types/node": "^20.14.9",
+    "@types/supertest": "^6.0.2",
+    "nodemon": "^3.1.4",
+    "rimraf": "^6.0.1",
+    "supertest": "^7.0.0",
+    "ts-jest": "^29.1.5",
     "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.5.2"
   }
 }

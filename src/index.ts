@@ -1,15 +1,22 @@
+import 'reflect-metadata';
 import express from 'express';
 import bodyParser from 'body-parser';
-import { userRouter } from './routes/userRoutes';
+import cors from 'cors';
+import {userRouter} from './routes/userRoutes';
+import { AppDataSource } from './data-source';
 
 const app = express();
-const port = 3000;
+const PORT = 5000;
 
+app.use(cors());
 app.use(bodyParser.json());
 
-// Routes
-app.use('/users', userRouter);
+AppDataSource.initialize().then(() => {
+  app.use('/api/users', userRouter);
 
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:3000`);
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}).catch((error) => {
+  console.log(error);
 });
