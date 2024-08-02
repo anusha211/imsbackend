@@ -40,7 +40,7 @@ export const createUser = (req: Request, res: Response) => {
     email: req.body.email,
     password: req.body.password,
     age: req.body.age,
-   
+   internship:req.body.internship
     
   };
   users.push(newUser);

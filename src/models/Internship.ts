@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, IntegerType } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, IntegerType, OneToMany } from 'typeorm';
 import { User } from './User';
 import { date } from 'joi';
 
@@ -18,6 +18,9 @@ export class Internship {
 
     @Column()
     isCertified!: boolean;
+
+    @OneToMany(() => User, (User) => User.internship)
+    users!: User[];
 
 
 }

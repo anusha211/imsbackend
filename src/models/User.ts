@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, IntegerType, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, IntegerType, ManyToOne, JoinColumn } from 'typeorm';
+import { Internship } from './Internship';
 
 @Entity()
 export class User {
@@ -18,8 +19,11 @@ export class User {
   age!:Number;
 
 
-/*
-  @ManyToOne(() => User, (user: { internships: any; }) => user.internships)
-    user: User | undefined;
- */ 
+  @ManyToOne(() => Internship, (internship) => internship.users, {
+    onDelete: 'CASCADE', // Matches migration behavior
+    onUpdate: 'CASCADE', // Matches migration behavior
+  })
+  @JoinColumn({ name: 'internshipId' }) // Explicitly specify join column
+  internship!: Internship;
+
 }

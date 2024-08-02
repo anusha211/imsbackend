@@ -1,6 +1,10 @@
 import { Request, Response } from 'express';
 import { AppDataSource } from '../data-source';
 import { User } from '../models/User';
+import { Internship } from '../models/Internship';
+import { any } from 'joi';
+import bcrypt from 'bcrypt';
+import { Any } from 'typeorm';
 
 // Create a new user
 export const createUser = async (req: Request, res: Response) => {
@@ -46,12 +50,26 @@ export const getUserById = async (req: Request, res: Response) => {
 export const updateUser = async (req: Request, res: Response) => {
   try {
     const userRepository = AppDataSource.getRepository(User);
-    const { name, email, password } = req.body;
-    const user = await userRepository.findOneBy({ id: parseInt(req.params.id) });
+    const internshipRepository=AppDataSource.getRepository(Internship);
+  
+    const { name, email, password,age, internshipId } = req.body;
+    const user = await userRepository.findOne({
+      where:{ id: parseInt(req.params.id) },
+      relations:['internship'],
+    });
     if (user) {
-      userRepository.merge(user, { name, email, password });
+      const internshipnew = internshipId? await internshipRepository.findOne({ where: { id: internshipId } }) 
+      : undefined;
+      const updatedData:Partial<User> = {
+        name,
+        email,
+        password: await bcrypt.hash(password,10),
+        age,
+        internship:internshipnew||user.internship,
+      }
+      userRepository.merge(user,updatedData );
       const updatedUser = await userRepository.save(user);
-      res.status(200).json(updatedUser);
+      res.status(200).json({updatedUser,message:'user updated'});
     } else {
       res.status(404).json({ message: 'User not found' });
     }
@@ -72,5 +90,37 @@ export const deleteUser = async (req: Request, res: Response) => {
     }
   } catch (error: any) {  // Specify error type as 'any' or 'Error'
     res.status(500).json({ message: error.message });
+  }
+};
+
+
+// Create a new user and associate with an internship
+export const createUserWithInternship = async (req: Request, res: Response) => {
+  const { name, email, age,password, internshipId } = req.body;
+
+  try {
+    const internshipRepository = AppDataSource.getRepository(Internship);
+    const internship = await internshipRepository.findOneBy({ id: internshipId });
+
+    if (!internship) {
+      return res.status(404).json({ message: 'Internship not found' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const userRepository = AppDataSource.getRepository(User);
+    const newUser = userRepository.create({
+      name,
+      email,
+      password:hashedPassword,
+      age,
+      internship, // Associate user with internship
+    });
+
+    await userRepository.save(newUser);
+
+    return res.status(201).json({ message: 'User created successfully', newUser });
+  } catch (error) {
+    return res.status(500).json({ message: 'Internal server error', error });
   }
 };

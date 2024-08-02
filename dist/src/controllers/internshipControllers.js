@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteInternship = exports.updateInternship = exports.getInternship = exports.getInternships = exports.createInternship = void 0;
+exports.getInternshipWithUsers = exports.deleteInternship = exports.updateInternship = exports.getInternship = exports.getInternships = exports.createInternship = void 0;
 const data_source_1 = require("../data-source");
 const Internship_1 = require("../models/Internship");
 const internshipvalidation_1 = require("../validation/internshipvalidation");
@@ -28,9 +28,10 @@ const createInternship = (req, res) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.createInternship = createInternship;
-
-const getInternships = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getInternships = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('getInternships endpoint hit'); // Debugging log
     try {
+        const internshipRepository = data_source_1.AppDataSource.getRepository(Internship_1.Internship);
         const internships = yield internshipRepository.find();
         res.json(internships);
     }
@@ -39,7 +40,6 @@ const getInternships = (_req, res) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.getInternships = getInternships;
-
 const getInternship = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const internship = yield internshipRepository.findOne({
@@ -84,3 +84,17 @@ const deleteInternship = (req, res) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.deleteInternship = deleteInternship;
+const getInternshipWithUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        // Find all internships with their associated users
+        const internships = yield internshipRepository.find({
+            relations: ['users'],
+        });
+        return res.status(200).json(internships);
+    }
+    catch (error) {
+        console.error('Error fetching internships with users:', error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+});
+exports.getInternshipWithUsers = getInternshipWithUsers;

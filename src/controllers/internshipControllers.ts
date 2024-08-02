@@ -70,3 +70,19 @@ export const deleteInternship = async (req: Request, res: Response) => {
         res.status(500).json({ message: (error as Error).message });
     }
 };
+
+
+export const getInternshipWithUsers = async (req: Request, res: Response) => {
+  
+    try {
+      // Find all internships with their associated users
+      const internships = await internshipRepository.find({
+        relations: ['users'],
+      });
+  
+      return res.status(200).json(internships);
+    } catch (error) {
+      console.error('Error fetching internships with users:', error);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+  };

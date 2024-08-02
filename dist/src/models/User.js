@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const typeorm_1 = require("typeorm");
+const Internship_1 = require("./Internship");
 let User = class User {
 };
 exports.User = User;
@@ -34,6 +35,15 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], User.prototype, "age", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => Internship_1.Internship, (internship) => internship.users, {
+        onDelete: 'CASCADE', // Matches migration behavior
+        onUpdate: 'CASCADE', // Matches migration behavior
+    }),
+    (0, typeorm_1.JoinColumn)({ name: 'internshipId' }) // Explicitly specify join column
+    ,
+    __metadata("design:type", Internship_1.Internship)
+], User.prototype, "internship", void 0);
 exports.User = User = __decorate([
     (0, typeorm_1.Entity)()
 ], User);

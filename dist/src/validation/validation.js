@@ -14,5 +14,7 @@ exports.createUserSchema = joi_1.default.object({
 exports.updateUserSchema = joi_1.default.object({
     name: joi_1.default.string().optional(),
     email: joi_1.default.string().email().optional(),
-    age: joi_1.default.number().integer().min(0).optional()
+    password: joi_1.default.string().min(6).optional(),
+    age: joi_1.default.number().integer().min(0).optional(),
+    internshipId: joi_1.default.number().integer().min(0).optional(),
 });

@@ -11,6 +11,8 @@ export const createUserSchema = Joi.object({
 export const updateUserSchema = Joi.object({
   name: Joi.string().optional(),
   email: Joi.string().email().optional(),
-  age: Joi.number().integer().min(0).optional()
+  password:Joi.string().min(6).optional(),
+  age: Joi.number().integer().min(0).optional(),
+  internshipId: Joi.number().integer().min(0).optional(),
 });
 

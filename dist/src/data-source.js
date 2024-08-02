@@ -40,7 +40,7 @@ exports.AppDataSource = new typeorm_1.DataSource({
     synchronize: false,
     logging: true,
     entities: [User_1.User, Internship_1.Internship],
-    migrations: ["dist/src/migration/1721366944283-CreateInternshipTable.js"],
+    migrations: ["dist/src/migration/**/*.js"],
     subscribers: [],
 });
 exports.AppDataSource.initialize()

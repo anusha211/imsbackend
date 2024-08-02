@@ -11,19 +11,24 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Internship = void 0;
 const typeorm_1 = require("typeorm");
+const User_1 = require("./User");
 let Internship = class Internship {
 };
 exports.Internship = Internship;
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
+    __metadata("design:type", Object)
 ], Internship.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], Internship.prototype, "mentorName", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'date' }),
     __metadata("design:type", Date)
 ], Internship.prototype, "joinedDate", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
+    (0, typeorm_1.Column)({ nullable: true, type: 'date' }),
     __metadata("design:type", Date)
 ], Internship.prototype, "completedDate", void 0);
 __decorate([
@@ -31,9 +36,9 @@ __decorate([
     __metadata("design:type", Boolean)
 ], Internship.prototype, "isCertified", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], Internship.prototype, "mentorName", void 0);
+    (0, typeorm_1.OneToMany)(() => User_1.User, (User) => User.internship),
+    __metadata("design:type", Array)
+], Internship.prototype, "users", void 0);
 exports.Internship = Internship = __decorate([
     (0, typeorm_1.Entity)()
 ], Internship);

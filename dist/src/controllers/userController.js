@@ -36,7 +36,7 @@ const createUser = (req, res) => {
         email: req.body.email,
         password: req.body.password,
         age: req.body.age,
-        internships: undefined,
+        internship: req.body.internship
     };
     users.push(newUser);
     res.status(201).json(newUser);
