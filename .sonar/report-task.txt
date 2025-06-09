@@ -1,0 +1,6 @@
+projectKey=frontendIMS
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=frontendIMS
+ceTaskId=8dd4b644-faa6-48d4-aa2d-2ed3a9e0ab1c
+ceTaskUrl=http://localhost:9000/api/ce/task?id=8dd4b644-faa6-48d4-aa2d-2ed3a9e0ab1c

@@ -5,11 +5,14 @@ import { Internship } from '../models/Internship';
 import { any } from 'joi';
 import bcrypt from 'bcrypt';
 import { Any } from 'typeorm';
+import { RolePermissionsMap } from '../models/RolePermissionsMap';
+import { Role } from '../models/Role';
 
 // Create a new user
 export const createUser = async (req: Request, res: Response) => {
   try {
     const userRepository = AppDataSource.getRepository(User);
+    const roleRepository = AppDataSource.getRepository(Role);
     const { name, email, password, age } = req.body;
     const newUser = userRepository.create({ name, email, password, age});
     const savedUser = await userRepository.save(newUser);
@@ -24,7 +27,7 @@ export const getUsers = async (req: Request, res: Response) => {
   console.log('getusers endpoint hit'); // Debugging log
   try {
     const userRepository = AppDataSource.getRepository(User);
-    const users = await userRepository.find();
+    const users = await userRepository.find({ relations:['internship']    });
     res.status(200).json(users);
   } catch (error: any) {  // Specify error type as 'any' or 'Error'
     res.status(500).json({ message: error.message });
@@ -63,7 +66,7 @@ export const updateUser = async (req: Request, res: Response) => {
       const updatedData:Partial<User> = {
         name,
         email,
-        password: await bcrypt.hash(password,10),
+       // password: await bcrypt.hash(password,10),
         age,
         internship:internshipnew||user.internship,
       }
@@ -122,5 +125,41 @@ export const createUserWithInternship = async (req: Request, res: Response) => {
     return res.status(201).json({ message: 'User created successfully', newUser });
   } catch (error) {
     return res.status(500).json({ message: 'Internal server error', error });
+  }
+};
+
+//get the userdetail with role
+export const getUserDetails = async (req: Request, res: Response) => {
+  try {
+    const userRepository = AppDataSource.getRepository(User);
+    const rolePermissionsRepository = AppDataSource.getRepository(RolePermissionsMap);
+    
+    const userId = parseInt(req.params.id, 10);
+
+    // Get the user along with their role
+    const user = await userRepository.findOne({
+      where: { id: userId },
+      relations: ['role'],
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Get the permissions for the user's role
+    const rolePermissions = await rolePermissionsRepository.find({
+      where: { role: user.role },
+      relations: ['permission'],
+    });
+
+    const permissions = rolePermissions.map((rp) => rp.permission.name);
+
+    res.status(200).json({
+      userId: user.id,
+      role: user.role.name,
+      permissions: permissions,
+    });
+  } catch (error) {
+    res.status(500).json({ message: (error as Error).message });
   }
 };

@@ -4,6 +4,7 @@ import { date } from 'joi';
 
 @Entity()
 export class Internship {
+
     @PrimaryGeneratedColumn()
     id!: IntegerType;
 

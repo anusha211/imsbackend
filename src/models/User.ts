@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, IntegerType, ManyToOne, JoinColumn } from 'typeorm';
 import { Internship } from './Internship';
+import { Role } from './Role';
 
 @Entity()
 export class User {
@@ -26,4 +27,7 @@ export class User {
   @JoinColumn({ name: 'internshipId' }) // Explicitly specify join column
   internship!: Internship;
 
+  @ManyToOne(() => Role, (role) => role.users)
+  @JoinColumn({ name: 'role_id' })
+  role!: Role;
 }

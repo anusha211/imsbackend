@@ -30,16 +30,18 @@ const createUser = (req, res) => {
       //  return res.status(400).json({ error: 'Invalid data provided' });
       }
     */
-    const newUser = {
+    /*
+      const newUser: User = {
         id: users.length + 1,
         name: req.body.name,
         email: req.body.email,
         password: req.body.password,
         age: req.body.age,
-        internship: req.body.internship
-    };
-    users.push(newUser);
-    res.status(201).json(newUser);
+       internship:req.body.internship,
+        
+      };
+      users.push(newUser);
+      res.status(201).json(newUser); */
 };
 exports.createUser = createUser;
 const getUserById = (req, res) => {

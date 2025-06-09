@@ -2,25 +2,24 @@
 
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import { CustomRequest, JwtPayload } from '../types/custome'; // Import your custom types
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
+// Make sure JwtPayload is exported
+export { JwtPayload };
 
-export const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
-  const authHeader = req.headers.authorization;
+export const authenticateJWT = (req: CustomRequest, res: Response, next: NextFunction) => {
+  const token = req.header('Authorization')?.split(' ')[1];
 
-  if (authHeader) {
-    const token = authHeader.split(' ')[1];
-
-    jwt.verify(token, JWT_SECRET, (err, user) => {
-      if (err) {
-        return res.sendStatus(403);
-      }
-
-      // @ts-ignore
-      req.user = user;
-      next();
-    });
-  } else {
-    res.sendStatus(401);
+  if (!token) {
+    return res.status(401).json({ message: 'Unauthorized' });
   }
+
+  jwt.verify(token, process.env.JWT_SECRET_KEY||'your_jwt_secret', (err: any, decoded: any) => {
+    if (err) {
+      return res.status(403).json({ message: 'Forbidden console logging' });
+    }
+
+    req.user = decoded as JwtPayload;
+    next();
+  });
 };

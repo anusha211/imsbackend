@@ -29,6 +29,9 @@ const mysqlDriver = __importStar(require("mysql2"));
 const typeorm_1 = require("typeorm");
 const User_1 = require("./models/User");
 const Internship_1 = require("./models/Internship");
+const Role_1 = require("./models/Role");
+const Permission_1 = require("./models/Permission");
+const RolePermissionsMap_1 = require("./models/RolePermissionsMap");
 exports.AppDataSource = new typeorm_1.DataSource({
     driver: mysqlDriver,
     type: 'mysql',
@@ -39,7 +42,7 @@ exports.AppDataSource = new typeorm_1.DataSource({
     database: 'userdb', // Replace with your database name
     synchronize: false,
     logging: true,
-    entities: [User_1.User, Internship_1.Internship],
+    entities: [User_1.User, Internship_1.Internship, Role_1.Role, Permission_1.Permission, RolePermissionsMap_1.RolePermissionsMap],
     migrations: ["dist/src/migration/**/*.js"],
     subscribers: [],
 });

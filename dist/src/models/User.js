@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const typeorm_1 = require("typeorm");
 const Internship_1 = require("./Internship");
+const Role_1 = require("./Role");
 let User = class User {
 };
 exports.User = User;
@@ -44,6 +45,11 @@ __decorate([
     ,
     __metadata("design:type", Internship_1.Internship)
 ], User.prototype, "internship", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => Role_1.Role, (role) => role.users),
+    (0, typeorm_1.JoinColumn)({ name: 'role_id' }),
+    __metadata("design:type", Role_1.Role)
+], User.prototype, "role", void 0);
 exports.User = User = __decorate([
     (0, typeorm_1.Entity)()
 ], User);

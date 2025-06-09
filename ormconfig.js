@@ -1,9 +1,9 @@
 export const type = "mysql";
 export const host = "localhost";
 export const port = 3306;
-export const username = 'root';
-export const password = '@rootgo123!';
-export const database = 'userdb';
+export const username = process.env.DB_USER;
+export const password = process.env.DB_PASSWORD;
+export const database = process.env.DB_NAME;
 export const synchronize = false;
 export const logging = false;
 export const entities = [
